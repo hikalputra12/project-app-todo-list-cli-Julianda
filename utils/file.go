@@ -37,3 +37,12 @@ func ReadFileJson() ([]model.Task, error) {
 	}
 	return task, nil
 }
+
+// write file
+func WriteFileJson(tasks []model.Task) error {
+	bytes, err := json.MarshalIndent(tasks, "", " ")
+	if err != nil {
+		return err
+	}
+	return os.WriteFile(FilePath, bytes, 0644)
+}
