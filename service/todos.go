@@ -1,6 +1,8 @@
 package service
 
 import (
+	"errors"
+	"strings"
 	"todo-list-app/model"
 	"todo-list-app/utils"
 )
@@ -66,6 +68,34 @@ func (t *TaskService) CreateTask(input model.Task) (model.Task, error) {
 	}
 	input.ID = maxID + 1
 
+	//validation input status
+	InputStatus := strings.ToLower(input.Status)
+	if input.Status != "" {
+		isValid := false
+		if InputStatus == utils.NoProgressStatus ||
+			InputStatus == utils.OnProgressStatus ||
+			InputStatus == utils.CompletedStatus {
+			isValid = true
+		}
+		if !isValid {
+			return model.Task{}, errors.New("status is not valid")
+		}
+	}
+
+	//validation input priority
+	InputPriority := strings.ToLower(input.Priority)
+	if InputPriority != "" {
+		isValid := false
+		if InputPriority == utils.LowPriority ||
+			InputPriority == utils.MediumPriority ||
+			InputPriority == utils.HighPriority {
+			isValid = true
+		}
+		if !isValid {
+			return model.Task{}, utils.ErrNotFOund
+		}
+	}
+
 	tasks = append(tasks, input)
 	//save input task
 	if err := t.saveTask(tasks); err != nil {
@@ -74,7 +104,67 @@ func (t *TaskService) CreateTask(input model.Task) (model.Task, error) {
 	return input, nil
 }
 
-// functio to delete a task
+// function to update a task
+func (t *TaskService) UpdateTask(id int, input model.Task) (model.Task, error) {
+	tasks, err := t.accessTask()
+	if err != nil {
+		return model.Task{}, err
+	}
+	//validation input status
+	InputStatus := strings.ToLower(input.Status)
+	if InputStatus != "" {
+		isValid := false
+		if InputStatus == utils.NoProgressStatus ||
+			InputStatus == utils.OnProgressStatus ||
+			InputStatus == utils.CompletedStatus {
+			isValid = true
+		}
+		for i, ts := range tasks {
+			if ts.ID == id {
+				input.ID = id
+				input.Title = ts.Title
+				input.Priority = ts.Priority
+				tasks[i] = input
+				break
+			}
+		}
+
+		if !isValid {
+			return model.Task{}, errors.New("Status is not valid")
+		}
+	}
+
+	// //validation input priority
+	// InputPriority := strings.ToLower(input.Priority)
+	// if input.Priority != "" {
+	// 	isValid := false
+	// 	if InputPriority == utils.LowPriority ||
+	// 		InputPriority == utils.MediumPriority ||
+	// 		InputPriority == utils.HighPriority {
+	// 		isValid = true
+	// 	}
+	// 	if !isValid {
+	// 		return model.Task{}, errors.New("Priority is not valid")
+	// 	}
+	// }
+	// foundtask := false
+	// for i := range tasks {
+	// 	if tasks[i].ID == input.ID {
+	// 		tasks[i].Priority = InputPriority
+	// 		foundtask = true
+	// 		break
+	// 	}
+	// }
+	// if !foundtask {
+	// 	return model.Task{}, utils.ErrNotFOund
+	// }
+	if err := t.saveTask(tasks); err != nil {
+		return model.Task{}, err
+	}
+	return input, nil
+}
+
+// function to delete a task
 func (t *TaskService) DeleteTask(id int) error {
 	tasks, err := t.accessTask()
 	if err != nil {

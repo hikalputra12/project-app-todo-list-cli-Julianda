@@ -11,7 +11,7 @@ import (
 const FilePath = "data/todos.json"
 
 // check filepath is exist or not and the function will return  error
-func IsFIleExist() error {
+func IsFileExist() error {
 	_, err := os.Stat(FilePath)
 	if errors.Is(err, os.ErrNotExist) {
 		if err := os.MkdirAll(filepath.Dir(FilePath), 0755); err != nil {
@@ -24,7 +24,7 @@ func IsFIleExist() error {
 
 // function will access to read the filepath
 func ReadFileJson() ([]model.Task, error) {
-	if err := IsFIleExist(); err != nil {
+	if err := IsFileExist(); err != nil {
 		return nil, err
 	}
 	bytes, err := os.ReadFile(FilePath)
@@ -46,3 +46,17 @@ func WriteFileJson(tasks []model.Task) error {
 	}
 	return os.WriteFile(FilePath, bytes, 0644)
 }
+
+// task status
+const (
+	NoProgressStatus = "no progress"
+	OnProgressStatus = "on progress"
+	CompletedStatus  = "completed"
+)
+
+// task priority
+const (
+	LowPriority    = "low"
+	MediumPriority = "medium"
+	HighPriority   = "high"
+)
