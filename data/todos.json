@@ -4,5 +4,11 @@
   "title": "mengerjakan tugas sekolah",
   "status": "onprogress",
   "priority": "high"
+ },
+ {
+  "id": 4,
+  "title": "menena nasi",
+  "status": "completed",
+  "priority": "medium"
  }
 ]

@@ -66,7 +66,18 @@ func (t *TaskService) CreateTask(input model.Task) (model.Task, error) {
 		}
 	}
 	input.ID = maxID + 1
-
+	//validasi title
+	if strings.TrimSpace(input.Title) == "" {
+		return model.Task{}, errors.New("title is a required field")
+	}
+	//validasi status
+	if strings.TrimSpace(input.Status) == "" {
+		return model.Task{}, errors.New("status is a required field")
+	}
+	//validasi priority
+	if strings.TrimSpace(input.Priority) == "" {
+		return model.Task{}, errors.New("priority is a required field")
+	}
 	//validation input status
 	InputStatus := strings.TrimSpace(strings.ToLower(input.Status))
 	if input.Status != "" {
@@ -129,7 +140,7 @@ func (t *TaskService) UpdateTask(number int, input model.Task) (model.Task, erro
 		}
 
 		if !isValid {
-			return model.Task{}, errors.New("Status is not valid")
+			return model.Task{}, errors.New("status is not valid")
 		}
 	}
 
