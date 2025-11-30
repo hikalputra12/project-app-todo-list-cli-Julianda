@@ -12,8 +12,8 @@ type TaskServiceInterface interface {
 	GetAllTask() ([]model.Task, error)
 	CreateTask(input model.Task) (model.Task, error)
 	GetTaskByTitle(input string) (*model.Task, error) //using pointer for efficiency and capability to return the nil
-	DeleteTask(id int) error
-	UpdateTask(id int, task model.Task) (model.Task, error)
+	DeleteTask(number int) error
+	UpdateTask(number int, input model.Task) (model.Task, error)
 }
 
 type TaskService struct{}
@@ -105,7 +105,7 @@ func (t *TaskService) CreateTask(input model.Task) (model.Task, error) {
 }
 
 // function to update a task
-func (t *TaskService) UpdateTask(id int, input model.Task) (model.Task, error) {
+func (t *TaskService) UpdateTask(number int, input model.Task) (model.Task, error) {
 	tasks, err := t.accessTask()
 	if err != nil {
 		return model.Task{}, err
@@ -120,8 +120,8 @@ func (t *TaskService) UpdateTask(id int, input model.Task) (model.Task, error) {
 			isValid = true
 		}
 		for i, ts := range tasks {
-			if ts.ID == id {
-				input.ID = id
+			if i+1 == number {
+				input.ID = ts.ID
 				input.Title = ts.Title
 				input.Priority = ts.Priority
 				tasks[i] = input
@@ -165,7 +165,7 @@ func (t *TaskService) UpdateTask(id int, input model.Task) (model.Task, error) {
 }
 
 // function to delete a task
-func (t *TaskService) DeleteTask(id int) error {
+func (t *TaskService) DeleteTask(number int) error {
 	tasks, err := t.accessTask()
 	if err != nil {
 		return err
@@ -173,9 +173,9 @@ func (t *TaskService) DeleteTask(id int) error {
 	//to initialize new []model.Task chunks efficiently
 	newTaskList := make([]model.Task, 0, len(tasks))
 	found := false
-	for _, ts := range tasks {
-		if ts.ID == id {
-			found = true
+	for i, ts := range tasks {
+		if i+1 == number {
+			found = true //penghapusan
 			continue
 		}
 		newTaskList = append(newTaskList, ts)

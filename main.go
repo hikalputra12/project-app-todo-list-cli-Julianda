@@ -36,7 +36,7 @@ func main() {
 			var title, status, priority string
 			fmt.Print("Enter task title: ")
 			fmt.Scanln(&title)
-			fmt.Print("Enter task status (no progress/on progress/completed): ")
+			fmt.Print("Enter task status (noprogress/onprogress/completed): ")
 			fmt.Scanln(&status)
 			fmt.Print("Enter task priority (low/medium/high): ")
 			fmt.Scanln(&priority)
@@ -55,7 +55,7 @@ func main() {
 			fmt.Println(out)
 			var id int
 			var status string
-			fmt.Print("masukkan id yang ingin anda update: ")
+			fmt.Print("masukkan nomor yang ingin anda update: ")
 			fmt.Scanln(&id)
 			fmt.Print("update status (no progress/on progress/completed): ")
 			fmt.Scanln(&status)
@@ -65,6 +65,18 @@ func main() {
 				continue
 			}
 			fmt.Println(upt)
+		case "4":
+			out, err := taskHandler.ListAllTask()
+			if err != nil {
+				fmt.Println("Error:", err)
+				continue
+			}
+			fmt.Println(out)
+			var number int
+			fmt.Print("masukkan nomor tugas yang anda ingin hapus: ")
+			fmt.Scanln(&number)
+			dlt := taskHandler.DeleteTask(number)
+			fmt.Println(dlt)
 		case "0":
 			fmt.Println("Exiting...")
 			return

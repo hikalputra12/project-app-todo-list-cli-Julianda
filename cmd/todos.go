@@ -13,7 +13,7 @@ type TaskServiceInterface interface {
 	GetAllTask() ([]model.Task, error)
 	CreateTask(input model.Task) (model.Task, error)
 	GetTaskByTitle(input string) (*model.Task, error) //using pointer for efficiency and capability to return the nil
-	DeleteTask(id int) error
+	DeleteTask(number int) error
 	UpdateTask(id int, task model.Task) (model.Task, error)
 }
 type TaskHandler struct {
@@ -39,11 +39,11 @@ func (h *TaskHandler) ListAllTask() (string, error) {
 	t := table.NewWriter()
 	t.SetOutputMirror(&b) //set output to strings.Builder //masih salah sepertinya
 	//set coloumn header
-	t.AppendHeader(table.Row{"ID", "Task", "Status", "Priority"})
+	t.AppendHeader(table.Row{"No.", "Task", "Status", "Priority"})
 
 	//add data
-	for _, ts := range tasks {
-		t.AppendRow(table.Row{ts.ID, ts.Title, ts.Status, ts.Priority})
+	for i, ts := range tasks {
+		t.AppendRow(table.Row{i + 1, ts.Title, ts.Status, ts.Priority})
 	}
 	//render table
 	t.Render()
@@ -79,5 +79,16 @@ func (h *TaskHandler) UpdateTask(id int, status string) (string, error) {
 	}
 	return fmt.Sprintf("Task Update: ID=%d, Title=%s, Status=%s, Priority=%s\n",
 		update.ID, update.Title, update.Status, update.Priority), nil
+
+}
+
+// function to delete task
+func (h *TaskHandler) DeleteTask(number int) error {
+	err := h.Service.DeleteTask(number)
+	if err != nil {
+		return err
+	}
+	fmt.Println("successfully deleted task with number  ", number)
+	return err
 
 }
