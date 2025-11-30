@@ -92,3 +92,27 @@ func (h *TaskHandler) DeleteTask(number int) error {
 	return err
 
 }
+
+// function to find task
+func (h *TaskHandler) GetTaskByTitle(input string) error {
+	tasks, err := h.Service.GetTaskByTitle(input)
+	if err != nil {
+		return nil
+	}
+	var b strings.Builder //joinning string like using + but with memory efficiency
+
+	//tablewriter receive io.writer as an output
+	t := table.NewWriter()
+	t.SetOutputMirror(&b) //set output to strings.Builder //masih salah sepertinya
+	//set coloumn header
+	t.AppendHeader(table.Row{"No.", "Task", "Status", "Priority"})
+
+	//add data
+
+	t.AppendRow(table.Row{1, tasks.Title, tasks.Status, tasks.Priority})
+	//render table
+	t.Render()
+	fmt.Println(b.String())
+	//retrieves and returns the final result of all the data that has been collected into strings.Builder
+	return nil
+}

@@ -47,8 +47,7 @@ func (t *TaskService) GetTaskByTitle(input string) (*model.Task, error) {
 	//access list of task
 	for _, ts := range task {
 		if ts.Title == input {
-			copy := ts
-			return &copy, nil
+			return &ts, nil
 		}
 	}
 	return nil, utils.ErrNotFOund

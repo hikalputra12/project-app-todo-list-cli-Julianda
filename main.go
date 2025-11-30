@@ -77,6 +77,13 @@ func main() {
 			fmt.Scanln(&number)
 			dlt := taskHandler.DeleteTask(number)
 			fmt.Println(dlt)
+		case "5":
+			var title string
+			fmt.Print("masukkan judul yang anda ingin cari: ")
+			fmt.Scanln(&title)
+			fn := taskHandler.GetTaskByTitle(title)
+			fmt.Println(fn)
+
 		case "0":
 			fmt.Println("Exiting...")
 			return
