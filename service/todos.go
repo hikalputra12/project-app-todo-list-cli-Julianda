@@ -68,7 +68,7 @@ func (t *TaskService) CreateTask(input model.Task) (model.Task, error) {
 	input.ID = maxID + 1
 
 	//validation input status
-	InputStatus := strings.ToLower(input.Status)
+	InputStatus := strings.TrimSpace(strings.ToLower(input.Status))
 	if input.Status != "" {
 		isValid := false
 		if InputStatus == utils.NoProgressStatus ||
@@ -110,7 +110,7 @@ func (t *TaskService) UpdateTask(number int, input model.Task) (model.Task, erro
 		return model.Task{}, err
 	}
 	//validation input status
-	InputStatus := strings.ToLower(input.Status)
+	InputStatus := strings.TrimSpace(strings.ToLower(input.Status))
 	if InputStatus != "" {
 		isValid := false
 		if InputStatus == utils.NoProgressStatus ||
@@ -123,7 +123,7 @@ func (t *TaskService) UpdateTask(number int, input model.Task) (model.Task, erro
 				input.ID = ts.ID
 				input.Title = ts.Title
 				input.Priority = ts.Priority
-				tasks[i] = input
+				tasks[i].Status = InputStatus
 				break
 			}
 		}

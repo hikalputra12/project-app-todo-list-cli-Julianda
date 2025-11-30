@@ -1,10 +1,13 @@
 package utils
 
 import (
+	"bufio"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"os"
 	"path/filepath"
+	"strings"
 	"todo-list-app/model"
 )
 
@@ -49,8 +52,8 @@ func WriteFileJson(tasks []model.Task) error {
 
 // task status
 const (
-	NoProgressStatus = "no progress"
-	OnProgressStatus = "on progress"
+	NoProgressStatus = "noprogress"
+	OnProgressStatus = "onprogress"
 	CompletedStatus  = "completed"
 )
 
@@ -60,3 +63,17 @@ const (
 	MediumPriority = "medium"
 	HighPriority   = "high"
 )
+
+// Inisialisasi bufio.Reader SEKALI di scope package
+var reader = bufio.NewReader(os.Stdin)
+
+// ReadLine adalah fungsi utilitas yang aman untuk membaca input baris penuh
+func ReadLine(prompt string) string {
+	fmt.Print(prompt)
+
+	// Membaca seluruh baris hingga karakter newline (\n)
+	input, _ := reader.ReadString('\n')
+
+	// Membersihkan spasi di awal/akhir dan karakter newline
+	return strings.TrimSpace(input)
+}

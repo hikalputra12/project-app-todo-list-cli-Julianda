@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"todo-list-app/cmd"
 	"todo-list-app/service"
+	"todo-list-app/utils"
 )
 
 func main() {
@@ -33,12 +34,11 @@ func main() {
 			}
 			fmt.Println(out)
 		case "2":
-			var title, status, priority string
-			fmt.Print("Enter task title: ")
+			title := utils.ReadLine("Enter task title: ")
 			fmt.Scanln(&title)
-			fmt.Print("Enter task status (noprogress/onprogress/completed): ")
+			status := utils.ReadLine("Enter task status (noprogress/onprogress/completed): ")
 			fmt.Scanln(&status)
-			fmt.Print("Enter task priority (low/medium/high): ")
+			priority := utils.ReadLine("Enter task priority (low/medium/high): ")
 			fmt.Scanln(&priority)
 			out, err := taskHandler.CreateTask(title, status, priority)
 			if err != nil {
@@ -53,13 +53,13 @@ func main() {
 				continue
 			}
 			fmt.Println(out)
-			var id int
+			var num int
 			var status string
-			fmt.Print("masukkan nomor yang ingin anda update: ")
-			fmt.Scanln(&id)
-			fmt.Print("update status (no progress/on progress/completed): ")
+			fmt.Print("Enter the number you want to update: ")
+			fmt.Scanln(&num)
+			fmt.Print("status update (noprogress/onprogress/completed):")
 			fmt.Scanln(&status)
-			upt, err := taskHandler.UpdateTask(id, status)
+			upt, err := taskHandler.UpdateTask(num, status)
 			if err != nil {
 				fmt.Println("Error:", err)
 				continue
@@ -78,8 +78,7 @@ func main() {
 			dlt := taskHandler.DeleteTask(number)
 			fmt.Println(dlt)
 		case "5":
-			var title string
-			fmt.Print("masukkan judul yang anda ingin cari: ")
+			title := utils.ReadLine("masukkan judul yang anda ingin cari: ")
 			fmt.Scanln(&title)
 			fn := taskHandler.GetTaskByTitle(title)
 			fmt.Println(fn)
